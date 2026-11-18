@@ -7,4 +7,6 @@ pip install -r requirements.txt --quiet
 if (-not (Test-Path ".env")) { Copy-Item .env.example .env }
 python -m src.ueba.generator.build_dataset
 python -m src.ueba.pipeline
-streamlit run app/streamlit_app.py --server.address localhost --server.port 8501
+Write-Host "Launching Casebook GUI at http://localhost:8501..." -ForegroundColor Green
+Write-Host "(Legacy Streamlit app available via: streamlit run app_legacy/streamlit_app.py)" -ForegroundColor Yellow
+python -m gui.server

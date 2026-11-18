@@ -30,5 +30,6 @@ python -m src.ueba.generator.build_dataset
 echo Running analysis pipeline...
 python -m src.ueba.pipeline
 
-echo Launching dashboard at http://localhost:8501
-streamlit run app/streamlit_app.py --server.address localhost --server.port 8501
+echo Launching Casebook GUI at http://localhost:8501...
+echo (To run the legacy Streamlit app instead: streamlit run app_legacy/streamlit_app.py)
+python -m gui.server

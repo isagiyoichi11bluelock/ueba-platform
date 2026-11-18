@@ -3,7 +3,7 @@
 **Speaker Persona:** Lead Security Engineer & Architect  
 **Audience:** Security Leadership, SOC Operations & Architecture Review Panel  
 **Total Target Time:** 5 Minutes 00 Seconds  
-**Demo Dashboard URL:** `http://localhost:8501`
+**Casebook GUI URL:** `http://localhost:8501`
 
 ---
 
@@ -12,7 +12,7 @@
 ### [0:00 – 0:45] Act 1: The Insider Threat Crisis & The Broken Status Quo
 > *"Good morning, everyone. In 2026, the average cost of an insider data breach exceeds $16 million. Traditional security solutions face a devastating dilemma: either security teams drown in thousands of daily false-positive alerts, or they deploy invasive spyware that monitors employee keystrokes and webcam feeds—destroying trust and violating privacy laws like the EU GDPR and India’s DPDP Act.*
 >
-> *Worse still, traditional rule engines flag anyone who travels, works late, or changes teams as an 'attacker'. But **an anomaly is not proof of wrongdoing**. Today, we are presenting our User and Entity Behavior Analytics (UEBA) Platform: an explainable, privacy-preserving, context-aware insider threat detection engine."*
+> *Worse still, traditional rule engines flag anyone who travels, works late, or changes teams as an 'attacker'. But **an anomaly is not proof of wrongdoing**. Today, we are presenting our User and Entity Behavior Analytics (UEBA) Platform: an explainable, privacy-preserving, context-aware insider threat detection engine with an editorial casebook interface designed for thoughtful reading, not alarmist noise."*
 
 ---
 
@@ -32,13 +32,14 @@
 ---
 
 ### [1:30 – 2:30] Act 3: Live Demo — S1 Compromised Account Killchain
-*(Switch to Streamlit Dashboard → **Scenarios Demo** or **Alert Detail**)*
-> *"Let’s look at the live platform. Here on the **Scenarios Demo** page, we have 8 synthetic ground-truth scenarios injected into our 90-day event database. Let’s trigger Scenario 1: Compromised Credentials.
+*(Switch to Casebook GUI → **Rehearsal** `/rehearsal` or **Case** `/case/{alert_id}`)*
+> *"Let’s look at the live platform. Here on the **Rehearsal** page, we present our 8 synthetic ground-truth scenarios as a casebook chapter collection. Let’s open Scenario 1: Compromised Credentials.
 >
-> Watch the alert detail:
+> Watch the case reading view:
 > - The subject user is represented strictly by pseudonym `U-9E41F2`—no names, emails, or cleartext employee IDs are displayed in the analyst UI.
-> - The risk score is **96 (Critical)**.
-> - Why? Look at the **Explainable Indicator Cards**:
+> - The risk score is **96 (Critical)**, displayed with clear typographic scale and tactile severity marks, not flashing badges.
+> - Look at the **24-Hour Timeline Rail**: unusual off-hours login activity is visually highlighted against their shaded typical working window.
+> - Why was it flagged? Look at the **Explainable Indicator Cards**:
 >   1. `FAILED_LOGIN_BURST_THEN_SUCCESS`: 8 password failures followed immediately by a successful MFA bypass.
 >   2. `NEW_COUNTRY` & `UNUSUAL_HOUR`: Session originated from Tokyo at 3:12 AM local time.
 >   3. `PRIVILEGE_ESCALATION_SEQUENCE`: Sudo and IAM role grants invoked within minutes.
@@ -49,7 +50,7 @@
 ---
 
 ### [2:30 – 3:30] Act 4: The Innovation — S4 Benign Travel vs. S8 Unapproved Contrast
-*(Switch to Scenario S4, then S8)*
+*(Switch to Scenario S4, then S8 in **Rehearsal**)*
 > *"Now let's examine our biggest competitive differentiator: **benign-exception handling**.
 >
 > In Scenario 4, a Senior Financial Analyst logs in from London at an unusual hour from a new laptop. In any legacy UEBA tool, this triggers a high-severity incident and wakes up the analyst on shift.
@@ -58,7 +59,7 @@
 >
 > Notice what happened:
 > - The alert was **not silently deleted**—silent suppression creates compliance blind spots.
-> - Instead, the indicator card clearly states: *'Severity reduced 70% due to approved travel context'*.
+> - Instead, a quiet teal callout clearly states: *'Severity reduced 70% due to approved travel context'*.
 >
 > Now, look at **Scenario 8**. This is our negative control: identical user, identical foreign login, identical odd hours, but **zero travel record in the registry**.
 > Result? Risk Score jumps to **68 (High)**.
@@ -67,18 +68,18 @@
 ---
 
 ### [3:30 – 4:15] Act 5: Analyst Feedback Loop & Cryptographic Audit Chain
-*(Switch to **Alert Queue** review modal → **Audit Log** page)*
+*(Switch to **Inbox** `/inbox` → **Ledger** `/ledger`)*
 > *"When an analyst reviews an alert, what happens next?
 > 1. An analyst can mark a finding as `benign_expected`.
 > 2. This creates an **Adjustment Rule** with an automated 30-day expiration, preventing alert fatigue without permanently blinding the model.
-> 3. Now let’s visit the **Audit Log** page. Every single analyst verdict, rule modification, pipeline run, and gated identity re-identification is cryptographically chained using SHA-256 hashes (`Hash_n = SHA256(Hash_{n-1} + Entry)`).
+> 3. Now let’s visit the **Ledger** page. Every single analyst verdict, rule modification, pipeline run, and gated identity re-identification is cryptographically chained using SHA-256 hashes (`Hash_n = SHA256(Hash_{n-1} + Entry)`).
 > 
-> Let's click **'Verify Audit Integrity'**. The engine recomputes the entire blockchain-style ledger across all entries: **PASS - 100% Integrity**. If an insider or compromised administrator alters a single character in the SQLite database, the chain breaks immediately and flags the exact corrupted entry."*
+> Let's click **'Check the Chain'**. The engine recomputes the entire cryptographic hash ledger across all entries: **100% Audit Chain Valid**. If an insider or compromised administrator alters a single character in the SQLite database, the chain breaks immediately and flags the exact corrupted entry."*
 
 ---
 
 ### [4:15 – 4:45] Act 6: Privacy by Design & Honest Limitations
-*(Switch to **Privacy and Limitations** page)*
+*(Switch to **Safeguards** `/safeguards` page)*
 > *"We built this platform adhering to the strictest interpretation of India’s Digital Personal Data Protection (DPDP) Act and the GDPR:
 > - **Data Minimization**: Raw IPs are truncated to `/24`. Free-text chat or surveillance captures are banned from ingestion.
 > - **Separation of Duties**: Only a `senior_analyst` with a logged, audited justification of at least 20 characters can view an employee's internal ID.

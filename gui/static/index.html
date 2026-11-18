@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Casebook — Behavior Review, Not Blame</title>
+
+  <!-- Local Vendored Stylesheets -->
+  <link rel="stylesheet" href="/static/css/tokens.css">
+  <link rel="stylesheet" href="/static/css/base.css">
+  <link rel="stylesheet" href="/static/css/components.css">
+
+  <!-- Local Vendored D3 -->
+  <script src="/static/vendor/d3.min.js"></script>
+</head>
+<body>
+
+  <!-- Top Global Header & Shell -->
+  <header class="site-header">
+    <div class="app-container site-header-inner">
+      <div class="brand-block">
+        <a href="/today" class="brand-title">Casebook</a>
+        <span class="brand-subtitle">behavior review, not blame</span>
+        <span class="banner-synthetic">Synthetic data. Demo only.</span>
+      </div>
+
+      <div class="header-controls">
+        <label for="header-role-select" class="role-badge">Persona:</label>
+        <select id="header-role-select" class="btn btn-sm" aria-label="Simulate User Role">
+          <option value="analyst">Analyst</option>
+          <option value="senior_analyst">Senior Analyst (Gated)</option>
+          <option value="auditor">Auditor (Read-Only)</option>
+        </select>
+        <button id="theme-toggle-btn" class="btn btn-subtle btn-sm" aria-label="Toggle Color Theme">Dark theme</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Top Navigation Bar -->
+  <div class="app-container">
+    <nav class="nav-bar" aria-label="Primary Casebook Navigation">
+      <a href="/today" class="nav-link active">Today</a>
+      <a href="/inbox" class="nav-link">Inbox</a>
+      <a href="/people" class="nav-link">People</a>
+      <a href="/normal" class="nav-link">Normal</a>
+      <a href="/rehearsal" class="nav-link">Rehearsal</a>
+      <a href="/ledger" class="nav-link">Ledger</a>
+      <a href="/safeguards" class="nav-link">Safeguards</a>
+      <a href="/evidence" class="nav-link">Evidence</a>
+      <a href="/styleguide" class="nav-link">Styleguide</a>
+    </nav>
+  </div>
+
+  <!-- Main View Container -->
+  <main class="app-container page-content" id="app-main-content">
+    <div class="editorial-card" style="padding: var(--space-8); text-align: center;">
+      <p class="text-muted">Loading Casebook desk…</p>
+    </div>
+  </main>
+
+  <!-- Keyboard Shortcuts Modal Drawer -->
+  <div id="shortcut-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="shortcut-title">
+    <div class="modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: var(--space-4);">
+        <h3 id="shortcut-title">Keyboard Navigation</h3>
+        <button id="shortcut-modal-close" class="btn btn-subtle btn-sm" aria-label="Close modal">✕ Close</button>
+      </div>
+
+      <table class="ledger-table" style="font-size: var(--text-sm);">
+        <tbody>
+          <tr>
+            <td><span class="kbd-badge">j</span> / <span class="kbd-badge">k</span></td>
+            <td>Move selection down / up in Inbox</td>
+          </tr>
+          <tr>
+            <td><span class="kbd-badge">Enter</span></td>
+            <td>Open selected case file</td>
+          </tr>
+          <tr>
+            <td><span class="kbd-badge">/</span></td>
+            <td>Focus search filter in Inbox</td>
+          </tr>
+          <tr>
+            <td><span class="kbd-badge">?</span></td>
+            <td>Toggle this shortcut guide</td>
+          </tr>
+          <tr>
+            <td><span class="kbd-badge">Esc</span></td>
+            <td>Dismiss modal or search focus</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Main Application Script -->
+  <script type="module" src="/static/js/app.js"></script>
+</body>
+</html>
+

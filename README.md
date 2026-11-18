@@ -2,13 +2,15 @@
 
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Streamlit](https://img.shields.io/badge/UI-Streamlit-FF4B4B.svg)](https://streamlit.io/)
+[![UI: Casebook Editorial Desk](https://img.shields.io/badge/UI-Casebook%20(FastAPI%20%2B%20Vanilla%20ESM)-warmpaper.svg)](http://localhost:8501)
 [![SQLite](https://img.shields.io/badge/Database-SQLite-003B57.svg)](https://www.sqlite.org/)
 
-An explainable, privacy-preserving, and context-aware **User and Entity Behavior Analytics (UEBA)** prototype designed to detect anomalous insider activity, account compromise, and data exfiltration while minimizing false positives and protecting employee dignity.
+An explainable, privacy-preserving, and context-aware **User and Entity Behavior Analytics (UEBA)** platform designed to detect anomalous insider activity, account compromise, and data exfiltration while minimizing false positives and protecting employee dignity.
+
+The user interface—**Casebook**—is modeled after an analyst's editorial desk: calm typography, warm paper tones, zero noisy dashboard widgets, real typographic scales, and the guiding philosophy that *"an anomaly is not proof of wrongdoing"*.
 
 > [!IMPORTANT]
-> **Core Principle:** An anomaly is **NOT** proof of wrongdoing. All findings are labeled as "unusual indicator" or "needs review"—never "guilty" or "malicious user". Benign-exception handling is a first-class architectural capability.
+> **Core Principle:** An anomaly is **NOT** proof of wrongdoing. All findings are presented with explainable context and indicators requiring review—never pre-judging guilt. Benign-exception handling is a first-class architectural capability.
 
 ---
 
@@ -22,7 +24,7 @@ Insider threats account for some of the most expensive and damaging security bre
 
 ### The Solution
 Our UEBA platform introduces four core innovations:
-1. **Explainable Indicator Cards:** Every alert decomposes into specific rule-based indicators linking directly to raw audit event IDs.
+1. **Explainable Indicator Cards & Human Narrative:** Every alert decomposes into specific rule-based indicators linking directly to raw audit event IDs, accompanied by a readable, human-styled case summary.
 2. **Context-Aware Risk Dampening:** Automatically correlates activity with business calendars (approved travel, month-end close, on-call schedules), mathematically dampening alert severity while maintaining transparent audit trails.
 3. **Blended Peer Baselines:** Solves the cold-start dilemma for new hires by dynamically blending individual baselines with role-peer norms.
 4. **Cryptographic Tamper-Evident Audit:** Uses an immutable SHA-256 hash chain to record all analyst reviews, config updates, and identity re-identifications.
@@ -64,13 +66,15 @@ flowchart TD
         CTX --> DAMP
     end
 
-    subgraph Presentation["5. Actionable SOC Interface"]
-        APP["Streamlit SOC Dashboard"]
-        DETAIL["Hero Alert Detail &\nScore Waterfall Chart"]
+    subgraph Presentation["5. Casebook Editorial Interface"]
+        API["FastAPI Local Server (127.0.0.1:8501)\n(CSRF Protection, Enforced RBAC)"]
+        GUI["Casebook Editorial Desk\n(Handcrafted HTML, CSS, ESM, D3.js)"]
+        DETAIL["Hero Case View &\n24-Hour Timeline Rail"]
         FEEDBACK["Analyst Feedback Loop &\n30-Day Adjustment Rules"]
         AUDIT["SHA-256 Cryptographic\nAudit Ledger"]
-        DAMP --> APP
-        APP --> DETAIL
+        DAMP --> API
+        API --> GUI
+        GUI --> DETAIL
         DETAIL --> FEEDBACK
         FEEDBACK --> AUDIT
     end
@@ -80,7 +84,7 @@ flowchart TD
 
 ## 3. Quick Start (Windows)
 
-The platform is completely self-contained and requires no Docker, external databases, or paid APIs.
+The platform is completely self-contained, runs offline, and requires no Docker, external databases, or paid APIs.
 
 ### Option A: One-Click Windows Batch
 Open Command Prompt and run:
@@ -111,10 +115,10 @@ python -m src.ueba.generator.build_dataset
 # 5. Execute baseline and detection pipeline
 python -m src.ueba.pipeline
 
-# 6. Launch the Streamlit dashboard
-streamlit run app/streamlit_app.py
+# 6. Launch the Casebook GUI (FastAPI)
+python -m gui.server
 ```
-Open **http://localhost:8501** in your browser.
+Open **http://localhost:8501** in your browser. (The legacy Streamlit dashboard remains available via `streamlit run app_legacy/streamlit_app.py`).
 
 ---
 
@@ -176,20 +180,17 @@ ueba-platform/
       scenarios.py                   # Injected ground-truth attack/benign scenarios
       context.py                     # Travel, month-end, and on-call scheduler
       build_dataset.py               # Data generator entry point
-  app/
-    streamlit_app.py                 # Multi-page navigation & role switcher
-    components.py                    # Shared UI widgets, banners, and metric cards
-    pages/
-      1_Overview.py                  # Executive KPI dashboard & risk distribution
-      2_Alert_Queue.py               # Filterable triage table
-      3_Alert_Detail.py              # Hero page: indicator waterfall, evidence, review
-      4_User_Timeline.py             # User behavioral timeline & activity maps
-      5_Baselines.py                 # User vs Role peer comparison radar
-      6_Scenarios_Demo.py            # Live S1-S8 demo runner with pass/fail badges
-      7_Audit_Log.py                 # Cryptographic ledger viewer & verification
-      8_Privacy_and_Limitations.py   # Rendered policy & technical boundaries
-      9_Model_Evaluation.py          # Ground-truth confusion matrix & metrics
+  gui/
+    server.py                        # Thin FastAPI application (CSRF, RBAC, endpoints)
+    static/
+      index.html                     # Semantic HTML shell (editorial desk layout)
+      css/                           # Design tokens, base typography, paper components
+      js/                            # ES modules router, safe DOM builder, views
+      vendor/                        # 100% offline vendored D3.js and font assets
+  app_legacy/                        # Preserved fallback Streamlit multi-page app
   tests/
+    test_gui_api.py                  # Comprehensive FastAPI and RBAC test suite
+    test_gui_visual_smoke.py         # Playwright multi-viewport & multi-theme smoke tests
     test_generator.py                # Validation of org and synthetic generators
     test_baseline.py                 # Non-leakage and baseline blending tests
     test_indicators.py               # Unit tests for each detection indicator
@@ -203,16 +204,20 @@ ueba-platform/
 
 ---
 
-## 6. Dashboard Preview (Screenshots & Capabilities)
+## 6. Casebook Interface Views
 
-| Dashboard View | Primary Security Analyst Capability |
-|---|---|
-| **Overview (`1_Overview.py`)** | Global SOC posture, severity breakdown, alert distribution, and departmental risk heatmaps. |
-| **Alert Queue (`2_Alert_Queue.py`)** | Interactive triage queue filterable by severity, status, role, date, and indicator type. |
-| **Alert Detail (`3_Alert_Detail.py`)** | **The Hero View**: Score composition waterfall chart, explainable indicator cards, exact triggering event IDs, and the analyst verdict review form. |
-| **Scenarios Demo (`6_Scenarios_Demo.py`)** | Single-click execution of scenarios S1–S8 demonstrating real-time contrast between malicious and benign context-dampened cases. |
-| **Audit Log (`7_Audit_Log.py`)** | Interactive verification of the SHA-256 hash chain with instant tamper detection. |
-| **Model Evaluation (`9_Model_Evaluation.py`)** | Complete confusion matrix, Precision/Recall/F1 metrics, and ablation study demonstrating the value of context dampening. |
+| View Name | Route | Analyst Experience & Key Features |
+|---|---|---|
+| **Today** | `/today` | Written editorial daily summary sentence, unequal columns, top cases needing review, weekly alert tick chart, role sparklines, and compact ledger table. |
+| **Inbox** | `/inbox` | Dense email-inbox style case queue, full keyboard navigation (`j`/`k` move, `Enter` opens, `b`/`s`/`m` verdicts, `/` search, `?` shortcuts modal). |
+| **Case (Hero)** | `/case/{id}` | Two-column reading layout: human colleague case narrative, 24h timeline rail with usual working hours shaded, score breakdown bar, benign context card, side-by-side indicator review, and feedback verdict form with 30-day adjustment rules. |
+| **People** | `/people` | Pseudonym index, department and tenure details, 60-day behavioral fingerprint heat strip, and gated re-identification modal (senior analyst only, requiring audited ≥20 char justification). |
+| **Normal** | `/normal` | Deep behavioral profile comparisons: individual rolling baseline vs departmental peer baseline, parameter breakdown, and cold-start blending weights. |
+| **Rehearsal** | `/rehearsal` | Scenarios demo presented as a short story collection (Chapters S1–S8) with prominent paired comparison between S4 (authorized travel) and S8 (unapproved control). |
+| **Ledger** | `/ledger` | Dense monospaced SHA-256 audit log with chain link symbols, "Check the Chain" one-click verification, tamper demonstration, and CSV export. |
+| **Safeguards** | `/safeguards` | Explicit live privacy guarantees (pseudonymization, IP truncation, retention, RBAC) alongside full rendered text of `docs/PRIVACY.md` and `docs/LIMITATIONS.md`. |
+| **Evidence** | `/evidence` | Ground-truth confusion matrix, precision/recall/F1 metrics, and ablation analysis proving the efficacy of context dampening. |
+| **Styleguide** | `/styleguide` | Living design system reference displaying all typographic scales, paper palette swatches, buttons, form controls, and severity marks. |
 
 ---
 
