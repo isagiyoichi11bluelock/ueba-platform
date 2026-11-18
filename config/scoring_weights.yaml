@@ -1,0 +1,46 @@
+indicators:
+  UNUSUAL_HOUR:
+    base_points: 20
+    description: "Activity outside learned working hours"
+  NEW_COUNTRY:
+    base_points: 35
+    description: "Login from a country not seen in baseline"
+  NEW_CITY:
+    base_points: 15
+    description: "Login from a city not seen in baseline"
+  IMPOSSIBLE_TRAVEL:
+    base_points: 60
+    description: "Two logins imply physically impossible travel speed"
+  NEW_DEVICE:
+    base_points: 25
+    description: "Login from an unrecognized device"
+  FAILED_LOGIN_BURST_THEN_SUCCESS:
+    base_points: 45
+    description: "Multiple failures followed by success"
+  DOWNLOAD_VOLUME_SPIKE:
+    base_points: 40
+    description: "Download volume far exceeds baseline"
+  DOWNLOAD_TREND:
+    base_points: 30
+    description: "Sustained upward trend in download volume"
+  NEW_RESOURCE_ACCESS:
+    base_points: 20
+    description: "Access to resources not seen in baseline"
+  OUT_OF_ROLE_SENSITIVE_ACCESS:
+    base_points: 45
+    description: "Access to sensitive resources outside role permissions"
+  OFF_HOURS_PRIVILEGE_USE:
+    base_points: 35
+    description: "Privileged actions outside normal hours"
+  PRIVILEGE_ESCALATION_SEQUENCE:
+    base_points: 55
+    description: "Privilege change followed by sensitive access"
+  RISKY_DESTINATION:
+    base_points: 30
+    description: "Download to personal device or external share"
+  PEER_DEVIATION:
+    base_points: 25
+    description: "Overall behavior deviates significantly from role peers"
+  ML_ANOMALY_SUPPORT:
+    base_points: 15
+    description: "Machine learning model flags unusual activity (supporting signal only)"

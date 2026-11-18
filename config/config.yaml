@@ -1,0 +1,64 @@
+# UEBA Platform Configuration
+seed: 42
+end_date: "yesterday"
+
+data:
+  num_users: 60
+  num_contractors: 10
+  num_resources: 150
+  history_days: 90
+  baseline_days: 75
+  detection_start_day: 76
+
+baseline:
+  rolling_window_days: 60
+  min_days_for_full_confidence: 30
+  min_events_for_full_confidence: 50
+  smoothing_alpha: 0.1
+
+thresholds:
+  impossible_travel_kmh: 900
+  failed_login_burst_count: 5
+  failed_login_burst_minutes: 10
+  download_spike_mad_z: 3.5
+  download_trend_days: 5
+  peer_deviation_z: 2.5
+
+scoring:
+  bands:
+    low: [0, 34]
+    medium: [35, 59]
+    high: [60, 79]
+    critical: [80, 100]
+  chain_bonus:
+    new_country_unusual_hour_bulk_download: 15
+    failed_login_then_privilege: 10
+    new_device_new_country: 8
+
+context_dampening:
+  max_reduction_factor: 0.80
+  approved_travel: 0.70
+  month_end_close: 0.65
+  on_call: 0.75
+  project_deadline: 0.50
+  new_joiner: 0.60
+  role_change: 0.50
+  undampenable_indicators:
+    - IMPOSSIBLE_TRAVEL
+    - FAILED_LOGIN_BURST_THEN_SUCCESS
+
+feedback:
+  adjustment_expiry_days: 30
+  max_adjustment_factor: 0.60
+  max_comment_chars: 500
+
+retention:
+  events_days: 90
+  alerts_days: 365
+  audit_days: 730
+
+privacy:
+  pseudonym_prefix: "U-"
+  ip_truncation: true
+  identity_map_access_role: "senior_analyst"
+  min_justification_chars: 20
