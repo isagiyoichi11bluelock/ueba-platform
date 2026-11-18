@@ -17,5 +17,6 @@ htmlcov/
 .vscode/
 .idea/
 *.swp
+*.zip
 .DS_Store
 Thumbs.db

@@ -26,7 +26,7 @@ PROJECT_ROOT = Path(__file__).parent.parent.resolve()
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from src.ueba.db import get_connection
+from src.ueba.db import get_connection, get_db_path
 from src.ueba.feedback import submit_feedback
 from src.ueba.privacy import request_reidentification
 from src.ueba.audit import verify_audit_chain, tamper_audit_entry, log_audit_event
@@ -376,20 +376,52 @@ def serve_app_shell():
     return HTMLResponse("<h2>Casebook GUI Initializing...</h2>", status_code=200)
 
 
+def ensure_database():
+    """Ensure database exists and is populated on first boot."""
+    db_file = get_db_path()
+    needs_init = False
+    if not db_file.exists():
+        needs_init = True
+    else:
+        try:
+            conn = get_connection(db_file)
+            cnt = conn.execute("SELECT COUNT(*) FROM alerts").fetchone()[0]
+            conn.close()
+            if cnt == 0:
+                needs_init = True
+        except Exception:
+            needs_init = True
+
+    if needs_init:
+        print("\n[INIT] Database not seeded. Generating synthetic dataset and running pipeline...")
+        from src.ueba.generator.build_dataset import main as build_data
+        from src.ueba.pipeline import run_pipeline
+        build_data()
+        run_pipeline()
+        print("[INIT] Database initialized successfully.\n")
+
+
+@app.on_event("startup")
+def on_startup():
+    ensure_database()
+
+
 def main():
     """Entry point for `python -m gui.server`."""
-    port = 8501
-    url = f"http://127.0.0.1:{port}"
+    port = int(os.environ.get("PORT", 8501))
+    host = os.environ.get("HOST", "0.0.0.0" if os.environ.get("PORT") or os.environ.get("RENDER") else "127.0.0.1")
+    url = f"http://{host}:{port}"
     print(f"\n=======================================================")
     print(f"  Casebook UEBA Platform — Editorial Desk")
     print(f"  Listening on: {url}")
-    print(f"  Binding: 127.0.0.1 (Localhost Only)")
+    print(f"  Binding: {host}")
     print(f"=======================================================\n")
-    try:
-        webbrowser.open(url)
-    except Exception:
-        pass
-    uvicorn.run("gui.server:app", host="127.0.0.1", port=port, log_level="info")
+    if host == "127.0.0.1":
+        try:
+            webbrowser.open(f"http://127.0.0.1:{port}")
+        except Exception:
+            pass
+    uvicorn.run("gui.server:app", host=host, port=port, log_level="info")
 
 
 if __name__ == "__main__":

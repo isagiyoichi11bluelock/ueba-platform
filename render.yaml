@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: ueba-platform
+    env: python
+    plan: free
+    region: oregon
+    buildCommand: "pip install -r requirements.txt && python -m src.ueba.generator.build_dataset && python -m src.ueba.pipeline"
+    startCommand: "python -m gui.server"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: PSEUDONYM_SALT
+        value: "ueba-production-salt-2026"
+      - key: HOST
+        value: "0.0.0.0"
