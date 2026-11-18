@@ -394,11 +394,14 @@ def ensure_database():
 
     if needs_init:
         print("\n[INIT] Database not seeded. Generating synthetic dataset and running pipeline...")
-        from src.ueba.generator.build_dataset import main as build_data
-        from src.ueba.pipeline import run_pipeline
-        build_data()
-        run_pipeline()
-        print("[INIT] Database initialized successfully.\n")
+        try:
+            from src.ueba.generator.build_dataset import build_dataset as build_data
+            from src.ueba.pipeline import run_pipeline
+            build_data()
+            run_pipeline()
+            print("[INIT] Database initialized successfully.\n")
+        except Exception as e:
+            print(f"[INIT ERROR] Failed to seed database: {e}\n")
 
 
 @app.on_event("startup")
